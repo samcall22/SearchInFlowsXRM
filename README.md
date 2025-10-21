@@ -1,29 +1,28 @@
 # Search in Automate (Samcall.XTB.FlowSearch)
 
-Un plugin para XrmToolBox que te permite buscar un término de texto específico de todos los flujos (Power Automate) que pertenecen a una solución.
+A plugin for XrmToolBox that allows you to search for a specific text string within all Power Automate flows belonging to a solution.
 
-## Descripción
+## Description
 
-Este plugin te ahorra horas de trabajo manual. En lugar de abrir cada flujo uno por uno para encontrar dónde se usa una variable específica, una clave de API o un texto, esta herramienta lo hace por ti, 
-devolviendote la ruta de cajas hasta llegar a la caja donde esta el string.
+This plugin saves you hours of manual work. Instead of opening each flow one by one to find where a specific variable, API key, or text string is used, this tool does it for you, returning the path of actions (scopes, conditions, etc.) to the action where the string was found.
 
-## Características
+## Features
 
-* Carga todas las soluciones visibles de tu entorno.
-* Lista todos los flujos de Power Automate que son componentes de la solución seleccionada.
-* Analiza el JSON de cada flujo para encontrar un término de texto.
-* Muestra los resultados agrupados por flujo.
-* Indica la "ruta de cajas" (ej. `root -> Scope_Mi_Accion -> Condicion`) donde se encontró la coincidencia.
+* Loads all visible solutions from your environment.
+* Lists all Power Automate flows that are components of the selected solution.
+* Analyzes the JSON of each flow to find a text string.
+* Displays the results grouped by flow.
+* Indicates the "action path" (e.g., `root -> Scope_My_Action -> Condition`) where the match was found.
 
-## Cómo Usarlo
+## How to Use
 
-1.  Abre la herramienta y conéctate a tu entorno de Dataverse.
-2.  Haz clic en **"Cargar Soluciones"**.
-3.  Selecciona la solución que quieres analizar en la lista de la izquierda.
-4.  En el campo **"Término a buscar"**, escribe el texto que deseas encontrar (ej. `mi_variable_global`).
-5.  Haz clic en **"Buscar Flujos en Solución"**.
-6.  Revisa los resultados en el panel de la derecha.
+1.  Open the tool and connect to your Dataverse environment.
+2.  Click on **"Load Solutions"**.
+3.  Select the solution you want to analyze from the list on the left.
+4.  In the **"Term to search"** field, type the text you want to find (e.g., `my_global_variable`).
+5.  Click on **"Search Flows in Solution"**.
+6.  Review the results in the right-hand panel.
 
-## Feedback y Reporte de Errores
+## Feedback and Bug Reports
 
-Si encuentras un error o tienes una idea para una mejora, por favor [crea un "Issue" aquí](https://github.com/TU_USUARIO_DE_GITHUB/Samcall.XTB.FlowSearch/issues).
+If you find a bug or have an idea for an improvement, please [create an "Issue" here](https://github.com/TU_USUARIO_DE_GITHUB/Samcall.XTB.FlowSearch/issues).

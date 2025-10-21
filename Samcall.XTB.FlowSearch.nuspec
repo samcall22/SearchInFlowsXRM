@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+	<metadata>
+		<id>Samcall.XTB.FlowSearch</id>
+
+		<version>1.0.0.1</version>
+
+		<title>Search in power automate flows</title>
+
+		<authors>linkedin.com/in/samuel-calleja</authors>
+
+		<description>
+			This plugin allows you to search for a text term within all flows (Power Automate) of a selected solution.</description>
+
+		<projectUrl>https://github.com/samcall22/SearchInFlowsXRM</projectUrl>
+		<icon>logo.png</icon>
+
+		<tags>XrmToolBox PowerAutomate Flow Search</tags>
+
+		<dependencies>
+			<dependency id="XrmToolBox" version="1.2025.7.71" />
+		</dependencies>
+	</metadata>
+
+	<files>
+		<file src="bin\Release\SearchInFlows.dll" target="lib\net48" />
+		<file src="logo.png" target="" />
+
+	</files>
+</package>

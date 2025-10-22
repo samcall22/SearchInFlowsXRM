@@ -3,14 +3,14 @@
     partial class MyPluginControl
     {
         /// <summary> 
-        /// Variable del diseñador necesaria.
+        /// Necessary designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
 
         /// <summary> 
-        /// Limpiar los recursos que se estén usando.
+        /// Clean up any resources being used.
         /// </summary>
-        /// <param name="disposing">true si los recursos administrados se deben desechar; false en caso contrario.</param>
+        /// <param name="disposing">true if managed resources should be disposed of; false otherwise.</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
@@ -22,9 +22,10 @@
 
         #region Código generado por el Diseñador de componentes
 
-        /// <summary> 
-        /// Método necesario para admitir el Diseñador. No se puede modificar
-        /// el contenido de este método con el editor de código.
+
+        /// <summary>
+        /// Method required to support the Designer. You cannot modify
+        /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent()
         {
@@ -151,8 +152,6 @@
         private System.Windows.Forms.ColumnHeader colUniqueName;
         private System.Windows.Forms.MaskedTextBox txtSearchTerm;
         private System.Windows.Forms.Label lblTextSearch;
-        // ¡IMPORTANTE! Se eliminaron los TableLayoutPanels vacíos
-        // private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-        // private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
+        
     }
 }

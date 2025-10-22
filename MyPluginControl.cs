@@ -1,13 +1,14 @@
 ﻿using McTools.Xrm.Connection;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
-using Newtonsoft.Json.Linq; // <-- Importante para JSON
+using Newtonsoft.Json.Linq; //JSON
 using System;
-using System.Collections.Generic; // <-- Importante para Listas y Diccionarios
-using System.Linq; // <-- Importante para .Select y .Sum
-using System.Text; // <-- Importante para StringBuilder
+using System.Collections.Generic; // List y Dict
+using System.Linq; //.Select y .Sum
+using System.Text; //StringBuilder
 using System.Windows.Forms;
 using XrmToolBox.Extensibility;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace SearchInFlows
 {
@@ -25,7 +26,7 @@ namespace SearchInFlows
 
         private void MyPluginControl_OnCloseTool(object sender, EventArgs e)
         {
-            // Nada que hacer al cerrar por ahora
+            // Nothing to do when closing for now
         }
 
         public override void UpdateConnection(IOrganizationService newService, ConnectionDetail detail, string actionName, object parameter)
@@ -33,17 +34,17 @@ namespace SearchInFlows
             base.UpdateConnection(newService, detail, actionName, parameter);
             LogInfo("Conexión actualizada.");
 
-            // Limpiamos los controles si la conexión cambia
+            // We clean the controls if the connection changes
             lvSolutions.Items.Clear();
             rtbResults.Clear();
             txtSearchTerm.Clear();
         }
 
-        // --- PASO 1: CARGAR SOLUCIONES ---
+        //--- STEP 1: LOAD SOLUTIONS ---
 
         private void btnFetchSolutions_Click(object sender, EventArgs e)
         {
-            // Limpiamos los controles
+            // We clean the controls
             lvSolutions.Items.Clear();
             rtbResults.Clear();
             txtSearchTerm.Clear();
@@ -92,7 +93,7 @@ namespace SearchInFlows
             });
         }
 
-        // --- PASO 2: BUSCAR TEXTO EN FLUJOS ---
+        // --- STEP 2: SEARCH FOR TEXT IN STREAMS ---
 
         private void btnFetchFlows_Click(object sender, EventArgs e)
         {
@@ -114,7 +115,7 @@ namespace SearchInFlows
             Guid selectedSolutionId = (Guid)selectedRow.Tag;
             string searchTerm = txtSearchTerm.Text;
 
-            // Usamos una lambda para pasar parámetros a ExecuteMethod
+            // We use a lambda to pass parameters to ExecuteMethod
             ExecuteMethod(() => SearchInFlows(selectedSolutionId, searchTerm));
         }
 
@@ -125,22 +126,22 @@ namespace SearchInFlows
                 Message = "Analizando flujos en la solución...",
                 Work = (worker, args) =>
                 {
-                    // 1. Consulta
+                    // 1. Consultation
                     var query = new QueryExpression("workflow");
                     query.ColumnSet.AddColumns("name", "clientdata"); // Pedimos el JSON
                     query.Criteria.AddCondition("category", ConditionOperator.Equal, 5); // Power Automate
 
-                    // 2. Vínculo (Join)
+                    // 2. Link (Join)
                     var link = new LinkEntity("workflow", "solutioncomponent", "workflowid", "objectid", JoinOperator.Inner);
                     link.LinkCriteria.AddCondition("solutionid", ConditionOperator.Equal, solutionId);
                     link.LinkCriteria.AddCondition("componenttype", ConditionOperator.Equal, 29); // Workflow
                     query.LinkEntities.Add(link);
 
-                    // 3. Ejecutar
+                    // 3.Run
                     EntityCollection retrievedFlows = Service.RetrieveMultiple(query);
 
-                    // 4. Analizar JSON
-                    // Usamos un Diccionario para agrupar resultados por nombre de flujo
+                    // 4. Parse JSON
+                    // We use a Dictionary to group results by stream name
                     var foundResults = new Dictionary<string, List<string>>();
 
                     foreach (var flowEntity in retrievedFlows.Entities)
@@ -166,12 +167,12 @@ namespace SearchInFlows
                         }
                     }
 
-                    // 5. Devolver Diccionario
+                    // 5. Return Dictionary
                     args.Result = foundResults;
                 },
                 PostWorkCallBack = (args) =>
                 {
-                    // 6. Mostrar Resultados Agrupados
+                    // 6. Show Grouped Results
                     if (args.Error != null)
                     {
                         MessageBox.Show(args.Error.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -191,12 +192,12 @@ namespace SearchInFlows
 
                     foreach (var entry in results)
                     {
-                        sb.AppendLine($"Flujo: {entry.Key}"); // Nombre del flujo
+                        sb.AppendLine($"Flujo: {entry.Key}"); // FLow name
                         foreach (var path in entry.Value)
                         {
-                            sb.AppendLine($"    Ruta: {path}"); // Rutas con sangría
+                            sb.AppendLine($"    Ruta: {path}"); // Routes with sangria
                         }
-                        sb.AppendLine(); // Espacio entre flujos
+                        sb.AppendLine(); // Space between flows
                     }
 
                     rtbResults.AppendText(sb.ToString());
@@ -205,7 +206,7 @@ namespace SearchInFlows
         }
 
         /// <summary>
-        /// Analiza recursivamente las acciones de un flujo buscando un término.
+        /// Recursively analyzes the actions in a stream looking for a term.
         /// </summary>
         private void FindInActions(JToken token, string searchTerm, string fileName, string currentPath, Dictionary<string, List<string>> results)
         {
@@ -215,11 +216,11 @@ namespace SearchInFlows
                 string newPath = $"{currentPath} -> {actionName}";
                 JToken actionContent = prop.Value;
 
-                // --- INICIO MEJORA: Búsqueda Limpia ---
+                // --- START IMPROVEMENT: Clean Search ---
                 JObject contentToSearch = actionContent.DeepClone() as JObject;
                 if (contentToSearch != null)
                 {
-                    // Eliminamos cajas hijas para no buscar dentro de ellas
+                    // We eliminated daughter boxes so as not to search inside them
                     contentToSearch.Remove("actions");
                     contentToSearch.Remove("iftrue");
                     contentToSearch.Remove("iffalse");
@@ -229,19 +230,20 @@ namespace SearchInFlows
 
                 string actionText = (contentToSearch ?? actionContent).ToString();
 
-                // Buscamos solo en el texto de esta caja
+                // We search only in the text in this box
                 if (actionText.Contains(searchTerm))
                 {
-                    // ¡Encontrado! Añadir al diccionario
+                    // Found! Add to dictionary
                     if (!results.ContainsKey(fileName))
                     {
                         results.Add(fileName, new List<string>());
                     }
                     results[fileName].Add(newPath);
                 }
-                // --- FIN MEJORA ---
 
-                // --- Búsqueda Recursiva (en el contenido original) ---
+                // --- END IMPROVEMENT ---
+
+                // --- Recursive Search (in original content) ---
                 var nestedActions = actionContent.SelectToken("actions");
                 if (nestedActions != null)
                 {
